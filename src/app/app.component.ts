@@ -1,34 +1,35 @@
-import { Component } from '@angular/core';
-
-declare let gapi: any;
+import { Component, OnInit, NgZone } from '@angular/core';
+import { UserService } from './services/userService';
+import { ListRepository } from './repositories/listRepository';
+import { List } from './models/list';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'project3-ui';
-  private auth2: any;
 
-  login = () => {
-    gapi.load('auth2', () => {
-      this.auth2 = gapi.auth2.init({
-        client_id: '...',
-        scope: 'email'
-      });
-      this.auth2.signIn().then(() => {
-        if (this.auth2.isSignedIn.get()) {
-          let profile = this.auth2.currentUser.get().getBasicProfile();
-          let authResponseObj = this.auth2.currentUser.get().getAuthResponse(true);
-          console.log(profile.getId());
-          console.log(profile.getName());
-          console.log(profile.getEmail());
-          console.log(profile.getImageUrl());
-          console.log(authResponseObj.access_token);
-          console.log(authResponseObj.id_token);
-        }
-      });
+  public lists: List[] = [];
+
+  constructor(private _ngZone: NgZone, private userService: UserService, private listRepository: ListRepository) { }
+
+  ngOnInit(): void {
+    this.reload();
+  }
+
+  reload = () => {
+    this.userService.login(() => {
+      this.listRepository.getLists().subscribe({
+        next: this.updateView
+      })
     });
+  }
+
+  private updateView = (data: List[]) => {
+    this._ngZone.run(() => {
+      this.lists = data;
+    })
   }
 }
