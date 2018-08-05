@@ -1,17 +1,17 @@
 import { Injectable } from "../../../node_modules/@angular/core";
-import { environment } from "../../environments/environment";
 import { Observable } from "../../../node_modules/rxjs";
-import { List } from "../models/list";
+import { environment } from "../../environments/environment";
+import { User } from "../models/user";
 import { BaseRepository } from "./baseRepository";
 import { HttpClient } from "../../../node_modules/@angular/common/http";
 
 @Injectable()
-export class ListRepository extends BaseRepository {
+export class UserRepository extends BaseRepository {
     constructor(private http: HttpClient) {
         super();
     }
 
-    public getLists(): Observable<Array<List>> {
-        return this.http.get<Array<List>>(environment.apiUrl + 'api/lists', this.getHttpOptions());
+    public getUser(): Observable<User> {
+        return this.http.get<User>(environment.apiUrl + 'api/users/me', this.getHttpOptions())
     }
 }

@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ListRepository } from './repositories/listRepository';
 import { UserService } from './services/userService';
+import { UserRepository } from './repositories/userRepository';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,7 @@ import { UserService } from './services/userService';
     BrowserModule,
     HttpClientModule
   ],
-  providers: [UserService, ListRepository],
+  providers: [UserRepository, UserService, ListRepository],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
