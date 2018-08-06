@@ -1,2 +1,14 @@
 <h1>Hello {{user.Name}}</h1>
-<h2 *ngFor="let list of lists">{{list.Name}}</h2>
+<button (click)="addList()">Add List</button>
+<select [(ngModel)]="selectedList" (change)="selectedListChanged()">
+    <option *ngFor="let list of lists" [ngValue]="list">{{list.Name}}</option>
+</select>
+<hr />
+<h1>{{selectedList.Name}}</h1>
+<ul>
+    <li *ngFor="let listItem of listItems">
+        {{listItem.Name}}
+        <button>Remove List Item</button>
+    </li>
+</ul>
+<button (click)="addListItem()">Add List Item</button>

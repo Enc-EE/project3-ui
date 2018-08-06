@@ -14,4 +14,12 @@ export class ListRepository extends BaseRepository {
     public getLists(): Observable<Array<List>> {
         return this.http.get<Array<List>>(environment.apiUrl + 'api/lists', this.getHttpOptions());
     }
+
+    public createList(list: List): Observable<number> {
+        return this.http.post<number>(environment.apiUrl + 'api/lists', list, this.getHttpOptions());
+    }
+
+    public updateList(listId: number, list: List): Observable<{}> {
+        return this.http.put(environment.apiUrl + 'api/lists/' + listId, list, this.getHttpOptions());
+    }
 }
