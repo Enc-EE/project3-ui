@@ -4,10 +4,14 @@
     <option *ngFor="let list of lists" [ngValue]="list">{{list.Name}}</option>
 </select>
 <hr />
-<h1>{{selectedList.Name}}</h1>
+<input [(ngModel)]="editingText">
+<button (click)="doneEdit()">Done</button>
+<hr />
+<h1 (click)="editList(selectedList)">{{selectedList.Name}}</h1>
+<button (click)="removeList()">Remove List</button>
 <ul>
     <li *ngFor="let listItem of listItems">
-        {{listItem.Name}}
+        <div (click)="editListItem(listItem)">{{listItem.Name}}</div>
         <button (click)="deleteListItem(listItem)">Remove List Item</button>
     </li>
 </ul>

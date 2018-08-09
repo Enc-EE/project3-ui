@@ -22,4 +22,8 @@ export class ListRepository extends BaseRepository {
     public updateList(listId: number, list: List): Observable<{}> {
         return this.http.put(environment.apiUrl + 'api/lists/' + listId, list, this.getHttpOptions());
     }
+
+    public delete(listId: number): Observable<{}> {
+        return this.http.delete(environment.apiUrl + 'api/lists/' + listId, this.getHttpOptions());
+    }
 }

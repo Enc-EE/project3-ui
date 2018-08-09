@@ -8,6 +8,7 @@ import { ListRepository } from './repositories/listRepository';
 import { UserService } from './services/userService';
 import { UserRepository } from './repositories/userRepository';
 import { ListItemRepository } from './repositories/listItemRepository';
+import { RouterModule } from '../../node_modules/@angular/router';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ListItemRepository } from './repositories/listItemRepository';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule.forRoot([])
   ],
   providers: [UserRepository, UserService, ListRepository, ListItemRepository],
   bootstrap: [AppComponent]
