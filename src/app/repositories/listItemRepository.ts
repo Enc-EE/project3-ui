@@ -16,4 +16,8 @@ export class ListItemRepository extends BaseRepository {
     public create(listId: number, listItem: ListItem): Observable<number> {
         return this.http.post<number>(environment.apiUrl + 'api/lists/' + listId + '/list-items', listItem, this.getHttpOptions());
     }
+
+    public delete(listId: number, listItemId: number): Observable<{}> {
+        return this.http.delete(environment.apiUrl + 'api/lists/' + listId + '/list-items/' + listItemId, this.getHttpOptions());
+    }
 }

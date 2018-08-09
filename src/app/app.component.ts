@@ -78,4 +78,12 @@ export class AppComponent implements OnInit {
   public selectedListChanged() {
     this.reloadListItems();
   }
+
+  public deleteListItem(listItem: ListItem) {
+    this.listItemRepository.delete(this.selectedList.Id, listItem.Id).subscribe({
+      next: () => {
+        this.reloadListItems();
+      }
+    })
+  }
 }
