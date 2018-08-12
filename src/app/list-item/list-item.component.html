@@ -1,0 +1,5 @@
+<div>
+  <h2 [ngClass]="{'hidden': isEditing}" (click)="edit()">{{text}}</h2>
+  <input #editor [(ngModel)]="editingText" [ngClass]="{'hidden': !isEditing}" (keyup)="keyUp($event)" (blur)="endEdit()" [autofocus]>
+  <button (click)="removeItem()">Remove</button>
+</div>

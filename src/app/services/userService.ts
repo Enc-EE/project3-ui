@@ -15,16 +15,19 @@ export class UserService {
     constructor(private router: Router, private userRepository: UserRepository) { }
 
     public login = () => {
+        console.log("Login");
+
         if (ConfigService.token == null) {
             switch (environment.client_id) {
                 case 'dev-id':
-                    ConfigService.token = 'dev-token'
+                    window.location.href = window.location.href + '#id_token=dev-token';
+                    location.reload();
                     break;
                 case 'prod-id':
-                    ConfigService.token = 'prod-token'
+                    window.location.href = window.location.href + '#id_token=prod-token';
+                    location.reload();
                     break;
                 default:
-                    console.log("g login");
                     this.gLogin();
                     break;
             }
@@ -32,8 +35,12 @@ export class UserService {
     }
 
     public afterGotToken = (afterLogin: () => void) => {
+        console.log('requesting user info');
+        
         this.userRepository.getUser().subscribe({
             next: (data) => {
+                console.log("Logged in as " + data.Name);
+                
                 this.loggedInUser = data;
                 afterLogin();
             }

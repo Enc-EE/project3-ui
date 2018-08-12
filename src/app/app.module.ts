@@ -9,10 +9,12 @@ import { UserService } from './services/userService';
 import { UserRepository } from './repositories/userRepository';
 import { ListItemRepository } from './repositories/listItemRepository';
 import { RouterModule } from '../../node_modules/@angular/router';
+import { ListItemComponent } from './list-item/list-item.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ListItemComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
 import { UserService } from './services/userService';
 import { ListRepository } from './repositories/listRepository';
 import { List } from './models/list';
@@ -7,6 +7,7 @@ import { ListItem } from './models/listItem';
 import { ListItemRepository } from './repositories/listItemRepository';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from './services/configService';
+import { ListItemComponent } from './list-item/list-item.component';
 
 @Component({
   selector: 'app-root',
@@ -19,20 +20,21 @@ export class AppComponent implements OnInit {
   editingList: ListItem;
   public editingText: string;
 
+  @ViewChildren(ListItemComponent) items !: QueryList<ListItemComponent>
+
   public lists: List[] = [];
   public user: User = new User();
   public selectedList: List = new List();
   public listItems: ListItem[] = [];
   private skipper = 0;
 
-  constructor(private _ngZone: NgZone, private route: ActivatedRoute, private router: Router, private userService: UserService, private listRepository: ListRepository, private listItemRepository: ListItemRepository) { }
+  constructor(private cd: ChangeDetectorRef, private route: ActivatedRoute, private router: Router, private userService: UserService, private listRepository: ListRepository, private listItemRepository: ListItemRepository) { }
 
   ngOnInit(): void {
     this.route.fragment.subscribe((fragment: string) => {
       if (this.skipper == 1) {
         if (fragment) {
           var token = fragment.split(/[&=]/)[1];
-          console.log(token);
           ConfigService.token = token;
           this.userService.afterGotToken(() => {
             this.reload();
@@ -43,15 +45,15 @@ export class AppComponent implements OnInit {
         }
       }
       this.skipper++;
-    })
+    });
   }
 
   private updateView = (data: List[]) => {
-    console.log("update");
-    console.log(data);
-
     this.user = this.userService.loggedInUser;
     this.lists = data;
+    if (!this.selectedList.Name && this.lists.length > 0) {
+      this.selectedList = this.lists[0];
+    }
     this.reloadListItems();
   }
 
@@ -141,5 +143,53 @@ export class AppComponent implements OnInit {
         this.reload();
       }
     });
+  }
+
+  public updateListItem(listItem: ListItem, event: string) {
+    if (!listItem.Id) {
+      listItem.Name = event;
+      this.listItemRepository.create(this.selectedList.Id, listItem).subscribe({
+        next: () => {
+          this.reloadListItems();
+        }
+      })
+    } else {
+      listItem.Name = event;
+      this.listItemRepository.update(this.selectedList.Id, listItem.Id, listItem).subscribe({
+        next: () => {
+          this.reloadListItems();
+        }
+      });
+    }
+  }
+
+  public editNext(listItem: ListItem) {
+    var index = this.listItems.indexOf(listItem);
+
+    if (index < this.listItems.length - 1) {
+      this.items.toArray()[index + 1].edit();
+    } else {
+      this.addNew();
+    }
+  }
+
+  public addNew() {
+    setTimeout(() => {
+      var listItem = new ListItem();
+      this.listItems.push(listItem);
+      this.cd.detectChanges();
+      setTimeout(() => {
+        this.items.last.edit();
+      }, 300);
+    }, 300);
+  }
+
+  public stop(listItem: ListItem, event: string) {
+    if (!event && !listItem.Id) {
+      var index = this.listItems.indexOf(listItem);
+      if (index == this.listItems.length - 1) {
+        this.listItems.pop();
+      }
+    }
   }
 }

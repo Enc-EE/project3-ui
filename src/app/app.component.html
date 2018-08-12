@@ -11,8 +11,7 @@
 <button (click)="removeList()">Remove List</button>
 <ul>
     <li *ngFor="let listItem of listItems">
-        <div (click)="editListItem(listItem)">{{listItem.Name}}</div>
-        <button (click)="deleteListItem(listItem)">Remove List Item</button>
+        <app-list-item [text]="listItem.Name" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)" (update)="updateListItem(listItem, $event)" (stop)="stop(listItem, $event)"></app-list-item>
     </li>
 </ul>
-<button (click)="addListItem()">Add List Item</button>
+<button (click)="addNew()">Add List Item</button>
