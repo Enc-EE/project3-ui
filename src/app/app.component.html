@@ -1,3 +1,4 @@
+<button (click)="login()" *ngIf="!isLoggedIn">Login</button>
 <h1>Hello {{user.Name}}</h1>
 <button (click)="addList()">Add List</button>
 <select [(ngModel)]="selectedList" (change)="selectedListChanged()">
@@ -9,6 +10,8 @@
 <hr />
 <h1 (click)="editList(selectedList)">{{selectedList.Name}}</h1>
 <button (click)="removeList()">Remove List</button>
-<app-list-item *ngFor="let listItem of listItems" [text]="listItem.Name" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)"
-    (update)="updateListItem(listItem, $event)" (stop)="stop(listItem, $event)"></app-list-item>
+<div class="list-container">
+    <app-list-item class="list" *ngFor="let listItem of listItems" [text]="listItem.Name" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)"
+        (update)="updateListItem(listItem, $event)" (stop)="stop(listItem, $event)"></app-list-item>
+</div>
 <button (click)="addNew()">Add List Item</button>

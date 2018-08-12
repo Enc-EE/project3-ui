@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
   public selectedList: List = new List();
   public listItems: ListItem[] = [];
   private skipper = 0;
+  public isLoggedIn = false;
 
   constructor(private cd: ChangeDetectorRef, private route: ActivatedRoute, private router: Router, private userService: UserService, private listRepository: ListRepository, private listItemRepository: ListItemRepository) { }
 
@@ -36,16 +37,19 @@ export class AppComponent implements OnInit {
         if (fragment) {
           var token = fragment.split(/[&=]/)[1];
           ConfigService.token = token;
+          this.isLoggedIn = true;
           this.userService.afterGotToken(() => {
             this.reload();
           });
           this.router.navigate(['/']);
-        } else {
-          this.userService.login();
         }
       }
       this.skipper++;
     });
+  }
+
+  public login() {
+    this.userService.login();
   }
 
   private updateView = (data: List[]) => {

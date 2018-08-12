@@ -1,0 +1,13 @@
+.list-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.list {
+}
+
+.list:not(:last-child) {
+    border-bottom: 1px solid black;
+}

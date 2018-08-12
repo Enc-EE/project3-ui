@@ -1,6 +1,6 @@
-<div class="list-item">
+<div class="list-item-container">
   <span class="item-title" [ngClass]="{'hidden': isEditing}" (click)="edit()">{{text}}</span>
-  <input #editor [(ngModel)]="editingText" [ngClass]="{'hidden': !isEditing}" (keyup)="keyUp($event)" (blur)="endEdit()" [autofocus]>
-  <i class="material-icons" (click)="removeItem()">delete</i>
+  <input class="list-item" #editor [(ngModel)]="editingText" [ngClass]="{'hidden': !isEditing}" (keyup)="keyUp($event)" (blur)="endEdit()" [autofocus]>
+  <i class="list-item" class="material-icons" (click)="removeItem()">delete</i>
   <!-- <button (click)="removeItem()">Remove</button> -->
 </div>
