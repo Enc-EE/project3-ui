@@ -10,6 +10,8 @@ import { UserRepository } from './repositories/userRepository';
 import { ListItemRepository } from './repositories/listItemRepository';
 import { RouterModule } from '../../node_modules/@angular/router';
 import { ListItemComponent } from './list-item/list-item.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { ListItemComponent } from './list-item/list-item.component';
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    RouterModule.forRoot([])
+    RouterModule.forRoot([]),
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [UserRepository, UserService, ListRepository, ListItemRepository],
   bootstrap: [AppComponent]
