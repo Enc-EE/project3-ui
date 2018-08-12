@@ -1,5 +1,6 @@
-<div>
-  <h2 [ngClass]="{'hidden': isEditing}" (click)="edit()">{{text}}</h2>
+<div class="list-item">
+  <span class="item-title" [ngClass]="{'hidden': isEditing}" (click)="edit()">{{text}}</span>
   <input #editor [(ngModel)]="editingText" [ngClass]="{'hidden': !isEditing}" (keyup)="keyUp($event)" (blur)="endEdit()" [autofocus]>
-  <button (click)="removeItem()">Remove</button>
+  <i class="material-icons" (click)="removeItem()">delete</i>
+  <!-- <button (click)="removeItem()">Remove</button> -->
 </div>

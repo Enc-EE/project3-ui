@@ -9,9 +9,6 @@
 <hr />
 <h1 (click)="editList(selectedList)">{{selectedList.Name}}</h1>
 <button (click)="removeList()">Remove List</button>
-<ul>
-    <li *ngFor="let listItem of listItems">
-        <app-list-item [text]="listItem.Name" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)" (update)="updateListItem(listItem, $event)" (stop)="stop(listItem, $event)"></app-list-item>
-    </li>
-</ul>
+<app-list-item *ngFor="let listItem of listItems" [text]="listItem.Name" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)"
+    (update)="updateListItem(listItem, $event)" (stop)="stop(listItem, $event)"></app-list-item>
 <button (click)="addNew()">Add List Item</button>
