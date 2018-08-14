@@ -1,4 +1,4 @@
-<div class="list-item-container">
+<div class="list-item-container mat-elevation-z2">
   <span class="item-title" [ngClass]="{'hidden': isEditing}" (click)="edit()">{{text}}</span>
   <input class="list-item" #editor [(ngModel)]="editingText" [ngClass]="{'hidden': !isEditing}" (keyup)="keyUp($event)" (blur)="endEdit()" [autofocus]>
   <i class="list-item" class="material-icons" (click)="removeItem()">delete</i>

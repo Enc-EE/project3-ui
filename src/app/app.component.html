@@ -1,17 +1,27 @@
-<button (click)="login()" *ngIf="!isLoggedIn">Login</button>
+<button mat-flat-button (click)="login()" *ngIf="!isLoggedIn">Login</button>
 <h1>Hello {{user.Name}}</h1>
-<button (click)="addList()">Add List</button>
-<select [(ngModel)]="selectedList" (change)="selectedListChanged()">
+<button mat-flat-button (click)="addList()">Add List</button>
+
+<mat-form-field>
+    <mat-select placeholder="List" (selectionChange)="selectedListChanged()" [(value)]="selectedList">
+        <mat-option *ngFor="let list of lists" [(value)]="selectedList" value="list">
+            {{list.Name}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+<!-- <select [(ngModel)]="selectedList" (change)="selectedListChanged()">
     <option *ngFor="let list of lists" [ngValue]="list">{{list.Name}}</option>
-</select>
+</select> -->
 
 <hr />
 <h1 [ngClass]="{'hidden': isListNameEditing}" (click)="editListName()">{{selectedList.Name}}</h1>
-<input #listNameEditor [(ngModel)]="listNameEditorText" [ngClass]="{'hidden': !isListNameEditing}" (keyup)="keyUp($event)" (blur)="endEdit()" [autofocus]>
+<input #listNameEditor [(ngModel)]="listNameEditorText" [ngClass]="{'hidden': !isListNameEditing}" (keyup)="keyUp($event)"
+    (blur)="endEdit()" [autofocus]>
 
-<button (click)="removeList()">Remove List</button>
+<button mat-flat-button (click)="removeList()">Remove List</button>
 <div class="list-container">
     <app-list-item class="list" *ngFor="let listItem of listItems" [text]="listItem.Name" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)"
         (update)="updateListItem(listItem, $event)" (stop)="stop(listItem, $event)"></app-list-item>
 </div>
-<button (click)="addNew()">Add List Item</button>
+<button mat-flat-button (click)="addNew()">Add List Item</button>
