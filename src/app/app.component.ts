@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChildren, QueryList, ChangeDetectorRef, Input, ViewChild, ElementRef } from '@angular/core';
 import { UserService } from './services/userService';
 import { ListRepository } from './repositories/listRepository';
 import { List } from './models/list';
@@ -16,9 +16,10 @@ import { ListItemComponent } from './list-item/list-item.component';
 })
 export class AppComponent implements OnInit {
   title = 'project3-ui';
-  editingListItem: ListItem;
-  editingList: ListItem;
-  public editingText: string;
+  
+  @ViewChild('listNameEditor') listNameEditor: ElementRef;
+  public isListNameEditing = false;
+  public listNameEditorText: string;
 
   @ViewChildren(ListItemComponent) items !: QueryList<ListItemComponent>
 
@@ -109,41 +110,10 @@ export class AppComponent implements OnInit {
     })
   }
 
-  public editListItem(listItem: ListItem) {
-    this.editingListItem = listItem;
-    this.editingText = this.editingListItem.Name;
-    console.log(this.editingListItem.Name);
-
-  }
-  public editList(list: List) {
-    this.editingList = list;
-    this.editingText = this.editingList.Name;
-  }
-
-  public doneEdit() {
-    if (this.editingList) {
-      this.editingList.Name = this.editingText;
-      this.listRepository.updateList(this.editingList.Id, this.editingList).subscribe({
-        next: () => {
-          this.reload();
-        }
-      });
-      this.editingList = null;
-    } else if (this.editingListItem) {
-      this.editingListItem.Name = this.editingText;
-      this.listItemRepository.update(this.selectedList.Id, this.editingListItem.Id, this.editingListItem).subscribe({
-        next: () => {
-          this.reloadListItems();
-        }
-      });
-      this.editingListItem = null;
-    }
-    this.editingText = null;
-  }
-
   public removeList() {
     this.listRepository.delete(this.selectedList.Id).subscribe({
       next: () => {
+        this.selectedList = null;
         this.reload();
       }
     });
@@ -194,6 +164,34 @@ export class AppComponent implements OnInit {
       if (index == this.listItems.length - 1) {
         this.listItems.pop();
       }
+    }
+  }
+
+  public editListName() {
+    this.listNameEditorText = this.selectedList.Name
+    this.isListNameEditing = true;
+    setTimeout(() => {
+      this.listNameEditor.nativeElement.focus();
+    }, 200);
+  }
+
+  public keyUp(event: KeyboardEvent) {
+    if (event.keyCode == 13) {
+      this.endEdit();
+    } else if (event.keyCode == 27) {
+      this.endEdit();
+    }
+  }
+
+  public endEdit() {
+    this.isListNameEditing = false;
+    if (this.listNameEditorText != this.selectedList.Name) {
+      this.selectedList.Name = this.listNameEditorText;
+      this.listRepository.updateList(this.selectedList.Id, this.selectedList).subscribe({
+        next: () => {
+          this.reload();
+        }
+      });
     }
   }
 }

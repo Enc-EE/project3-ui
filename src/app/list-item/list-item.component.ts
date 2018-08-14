@@ -37,6 +37,8 @@ export class ListItemComponent implements OnInit {
     if (event.keyCode == 13) {
       this.endEdit();
       this.next.emit();
+    } else if (event.keyCode == 27) {
+      this.endEdit();
     }
   }
 

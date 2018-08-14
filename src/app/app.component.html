@@ -4,11 +4,11 @@
 <select [(ngModel)]="selectedList" (change)="selectedListChanged()">
     <option *ngFor="let list of lists" [ngValue]="list">{{list.Name}}</option>
 </select>
+
 <hr />
-<input [(ngModel)]="editingText">
-<button (click)="doneEdit()">Done</button>
-<hr />
-<h1 (click)="editList(selectedList)">{{selectedList.Name}}</h1>
+<h1 [ngClass]="{'hidden': isListNameEditing}" (click)="editListName()">{{selectedList.Name}}</h1>
+<input #listNameEditor [(ngModel)]="listNameEditorText" [ngClass]="{'hidden': !isListNameEditing}" (keyup)="keyUp($event)" (blur)="endEdit()" [autofocus]>
+
 <button (click)="removeList()">Remove List</button>
 <div class="list-container">
     <app-list-item class="list" *ngFor="let listItem of listItems" [text]="listItem.Name" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)"
