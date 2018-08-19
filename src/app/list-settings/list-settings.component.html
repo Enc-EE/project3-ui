@@ -1,0 +1,9 @@
+<mat-form-field>
+  <input matInput [(ngModel)]="name">
+</mat-form-field>
+
+<button mat-icon-button [mat-dialog-close]="deleteIt">
+  <mat-icon>delete</mat-icon>
+</button>
+<button [mat-dialog-close]="name">Done</button>
+<button [mat-dialog-close]="data.rename">Cancel</button>

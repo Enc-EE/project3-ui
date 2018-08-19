@@ -1,13 +1,3 @@
-/* .list-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+.content {
+    margin: 0.2em;
 }
-
-.list {
-} */
-/* 
-.list:not(:last-child) {
-    border-bottom: 1px solid black;
-} */

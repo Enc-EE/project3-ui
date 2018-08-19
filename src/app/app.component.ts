@@ -8,6 +8,8 @@ import { ListItemRepository } from './repositories/listItemRepository';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from './services/configService';
 import { ListItemComponent } from './list-item/list-item.component';
+import { MatDialog } from '@angular/material';
+import { ListSettingsComponent } from './list-settings/list-settings.component';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +18,7 @@ import { ListItemComponent } from './list-item/list-item.component';
 })
 export class AppComponent implements OnInit {
   title = 'project3-ui';
-  
+
   @ViewChild('listNameEditor') listNameEditor: ElementRef;
   public isListNameEditing = false;
   public listNameEditorText: string;
@@ -30,7 +32,7 @@ export class AppComponent implements OnInit {
   private skipper = 0;
   public isLoggedIn = false;
 
-  constructor(private cd: ChangeDetectorRef, private route: ActivatedRoute, private router: Router, private userService: UserService, private listRepository: ListRepository, private listItemRepository: ListItemRepository) { }
+  constructor(private cd: ChangeDetectorRef, private route: ActivatedRoute, private router: Router, public dialog: MatDialog, private userService: UserService, private listRepository: ListRepository, private listItemRepository: ListItemRepository) { }
 
   ngOnInit(): void {
     this.route.fragment.subscribe((fragment: string) => {
@@ -99,6 +101,7 @@ export class AppComponent implements OnInit {
   }
 
   public selectedListChanged() {
+    console.log(this.selectedList.Name);
     this.reloadListItems();
   }
 
@@ -193,5 +196,26 @@ export class AppComponent implements OnInit {
         }
       });
     }
+  }
+
+  public settings() {
+    const dialogRef = this.dialog.open(ListSettingsComponent, {
+      width: '250px',
+      data: { rename: this.selectedList.Name, delete: false }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed: ' + result);
+      if (result === ListSettingsComponent.delete) {
+        this.removeList();
+      } else if (result != this.selectedList.Name) {
+        this.selectedList.Name = result;
+        this.listRepository.updateList(this.selectedList.Id, this.selectedList).subscribe({
+          next: () => {
+            this.reload();
+          }
+        });
+      }
+    });
   }
 }

@@ -13,12 +13,14 @@ import { RouterModule } from '../../node_modules/@angular/router';
 import { ListItemComponent } from './list-item/list-item.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { MatButtonModule, MatSelectModule } from '@angular/material';
+import { MatButtonModule, MatSelectModule, MatToolbarModule, MatInputModule, MatIconModule, MatDialogModule } from '@angular/material';
+import { ListSettingsComponent } from './list-settings/list-settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ListItemComponent
+    ListItemComponent,
+    ListSettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -26,11 +28,16 @@ import { MatButtonModule, MatSelectModule } from '@angular/material';
     FormsModule,
     MatButtonModule,
     MatSelectModule,
+    MatToolbarModule,
+    MatInputModule,
+    MatIconModule,
+    MatDialogModule,
     HttpClientModule,
     RouterModule.forRoot([]),
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [UserRepository, UserService, ListRepository, ListItemRepository],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ListSettingsComponent]
 })
 export class AppModule { }
