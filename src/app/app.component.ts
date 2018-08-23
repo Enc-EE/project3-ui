@@ -8,7 +8,7 @@ import { ListItemRepository } from './repositories/listItemRepository';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from './services/configService';
 import { ListItemComponent } from './list-item/list-item.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSelectionListChange, MatSelectionList } from '@angular/material';
 import { ListSettingsComponent } from './list-settings/list-settings.component';
 
 @Component({
@@ -217,5 +217,25 @@ export class AppComponent implements OnInit {
         });
       }
     });
+  }
+
+  public selectionChanged = (event: MatSelectionListChange) => {
+    this.changeSelection(event.option.value, event.option.selected)
+  }
+
+  private changeSelection = (listItem: ListItem, isSelected: boolean) => {
+    listItem.IsSelected = isSelected;
+    this.listItemRepository.update(this.selectedList.Id, listItem.Id, listItem).subscribe({
+      next: () => {
+        this.reloadListItems();
+      }
+    });
+  }
+
+  public organize = (selection: MatSelectionList) => {
+    for (let i = 0; i < selection.selectedOptions.selected.length; i++) {
+      const option = selection.selectedOptions.selected[i];
+      this.deleteListItem(option.value);
+    }
   }
 }

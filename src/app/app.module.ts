@@ -13,7 +13,7 @@ import { RouterModule } from '../../node_modules/@angular/router';
 import { ListItemComponent } from './list-item/list-item.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { MatButtonModule, MatSelectModule, MatToolbarModule, MatInputModule, MatIconModule, MatDialogModule } from '@angular/material';
+import { MatButtonModule, MatSelectModule, MatToolbarModule, MatInputModule, MatIconModule, MatDialogModule, MatListModule } from '@angular/material';
 import { ListSettingsComponent } from './list-settings/list-settings.component';
 
 @NgModule({
@@ -32,6 +32,7 @@ import { ListSettingsComponent } from './list-settings/list-settings.component';
     MatInputModule,
     MatIconModule,
     MatDialogModule,
+    MatListModule,
     HttpClientModule,
     RouterModule.forRoot([]),
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })

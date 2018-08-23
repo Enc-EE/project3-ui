@@ -31,10 +31,13 @@
             (blur)="endEdit()" [autofocus]> -->
 
         <!-- <button mat-flat-button (click)="removeList()">Remove List</button> -->
-        <div class="list-container">
-            <app-list-item class="list" *ngFor="let listItem of listItems" [text]="listItem.Name" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)"
-                (update)="updateListItem(listItem, $event)" (stop)="stop(listItem, $event)"></app-list-item>
-        </div>
+        <mat-selection-list #listItemSelection (selectionChange)="selectionChanged($event)">
+            <mat-list-option *ngFor="let listItem of listItems" [value]="listItem" [selected]="listItem.IsSelected">
+                <app-list-item [text]="listItem.Name" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)"
+                    (update)="updateListItem(listItem, $event)" (stop)="stop(listItem, $event)"></app-list-item>
+            </mat-list-option>
+        </mat-selection-list>
         <button mat-flat-button (click)="addNew()">Add List Item</button>
+        <button mat-flat-button (click)="organize(listItemSelection)">Organize</button>
     </div>
 </div>
