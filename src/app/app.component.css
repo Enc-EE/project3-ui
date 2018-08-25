@@ -12,6 +12,7 @@
 .content {
     margin: 0.4em;
     flex-grow: 1;
+    overflow: auto;
 }
 
 .bottom {
