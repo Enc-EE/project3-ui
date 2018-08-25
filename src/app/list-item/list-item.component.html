@@ -1,6 +1,14 @@
-<div class="list-item-container mat-elevation-z2">
-  <span class="item-title" [ngClass]="{'hidden': isEditing}" (click)="edit()">{{text}}</span>
-  <input class="list-item" #editor [(ngModel)]="editingText" [ngClass]="{'hidden': !isEditing}" (keyup)="keyUp($event)" (blur)="endEdit()" [autofocus]>
-  <!-- <i class="list-item" class="material-icons" (click)="removeItem()">delete</i> -->
-  <!-- <button (click)="removeItem()">Remove</button> -->
-</div>
+<mat-list-item class="list-item mat-elevation-z3" [ngClass]="{'done': listItem.IsSelected}">
+  <div class="list-item-text">
+    <span class="item-title" (click)="edit()" *ngIf="!isEditing">{{text}}</span>
+    <input #editor [(ngModel)]="editingText" *ngIf="isEditing" (keyup)="keyUp($event)" (blur)="endEdit()" [autofocus]>
+  </div>
+  <div class="list-item-options">
+    <button mat-raised-button mat-icon-button (click)="done()">
+      <mat-icon>done</mat-icon>
+    </button>
+    <button mat-raised-button mat-icon-button (click)="removeItem()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</mat-list-item>

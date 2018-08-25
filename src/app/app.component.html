@@ -1,43 +1,36 @@
-<mat-toolbar color="primary">
-    <span>Hello {{user.Name}}</span>
-</mat-toolbar>
-<div class="content">
-    <button mat-flat-button (click)="login()" *ngIf="!isLoggedIn">Login</button>
-    <div *ngIf="isLoggedIn">
+<div class="app">
+    <mat-toolbar color="primary" class="top mat-elevation-z6">
+        <span>Hello {{user.Name}}</span>
+    </mat-toolbar>
+    <div class="content">
+        <button mat-flat-button (click)="login()" *ngIf="!isLoggedIn">Login</button>
+        <div *ngIf="isLoggedIn">
 
-        <mat-form-field>
-            <mat-select placeholder="List" (selectionChange)="selectedListChanged()" [(value)]="selectedList">
-                <mat-option *ngFor="let list of lists" [value]="list">
-                    {{list.Name}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <button mat-icon-button (click)="addList()">
+            <mat-form-field>
+                <mat-select placeholder="List" (selectionChange)="selectedListChanged()" [(value)]="selectedList">
+                    <mat-option *ngFor="let list of lists" [value]="list">
+                        {{list.Name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <button mat-icon-button (click)="addList()">
+                <mat-icon>add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="settings()">
+                <mat-icon>settings</mat-icon>
+            </button>
+            <mat-list #listItemSelection (selectionChange)="selectionChanged($event)">
+                <app-list-item *ngFor="let listItem of listItems" [text]="listItem.Name" [listItem]="listItem" [listItd]="selectedList.Id" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)"
+                    (update)="updateListItem(listItem, $event)" (stop)="stop(listItem, $event)"></app-list-item>
+            </mat-list>
+        </div>
+    </div>
+    <mat-toolbar class="bottom mat-elevation-z6">
+        <button mat-raised-button mat-icon-button (click)="addNew()">
             <mat-icon>add</mat-icon>
         </button>
-        <button mat-icon-button (click)="settings()">
-            <mat-icon>settings</mat-icon>
+        <button mat-raised-button mat-icon-button (click)="organize()">
+            <mat-icon>playlist_add_check</mat-icon>
         </button>
-        <!-- <i class="material-icons" (click)="addList()">add</i>
-        <i class="material-icons" (click)="settings()">settings</i> -->
-
-        <!-- <select [(ngModel)]="selectedList" (change)="selectedListChanged()">
-            <option *ngFor="let list of lists" [ngValue]="list">{{list.Name}}</option>
-        </select> -->
-
-        <!-- <hr />
-        <h1 [ngClass]="{'hidden': isListNameEditing}" (click)="editListName()">{{selectedList.Name}}</h1>
-        <input #listNameEditor [(ngModel)]="listNameEditorText" [ngClass]="{'hidden': !isListNameEditing}" (keyup)="keyUp($event)"
-            (blur)="endEdit()" [autofocus]> -->
-
-        <!-- <button mat-flat-button (click)="removeList()">Remove List</button> -->
-        <mat-selection-list #listItemSelection (selectionChange)="selectionChanged($event)">
-            <mat-list-option *ngFor="let listItem of listItems" [value]="listItem" [selected]="listItem.IsSelected">
-                <app-list-item [text]="listItem.Name" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)"
-                    (update)="updateListItem(listItem, $event)" (stop)="stop(listItem, $event)"></app-list-item>
-            </mat-list-option>
-        </mat-selection-list>
-        <button mat-flat-button (click)="addNew()">Add List Item</button>
-        <button mat-flat-button (click)="organize(listItemSelection)">Organize</button>
-    </div>
+    </mat-toolbar>
 </div>

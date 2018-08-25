@@ -208,7 +208,7 @@ export class AppComponent implements OnInit {
       console.log('The dialog was closed: ' + result);
       if (result === ListSettingsComponent.delete) {
         this.removeList();
-      } else if (result != this.selectedList.Name) {
+      } else if (result && result != this.selectedList.Name) {
         this.selectedList.Name = result;
         this.listRepository.updateList(this.selectedList.Id, this.selectedList).subscribe({
           next: () => {
@@ -232,10 +232,16 @@ export class AppComponent implements OnInit {
     });
   }
 
-  public organize = (selection: MatSelectionList) => {
-    for (let i = 0; i < selection.selectedOptions.selected.length; i++) {
-      const option = selection.selectedOptions.selected[i];
-      this.deleteListItem(option.value);
+  public organize = () => {
+    for (let i = 0; i < this.listItems.length; i++) {
+      const listItem = this.listItems[i];
+      if (listItem.IsSelected) {
+        this.deleteListItem(listItem);
+      }
     }
+    // for (let i = 0; i < selection.selectedOptions.selected.length; i++) {
+    //   const option = selection.selectedOptions.selected[i];
+    //   this.deleteListItem(option.value);
+    // }
   }
 }

@@ -3,7 +3,7 @@
   "short_name": "project3-ui",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
-  "display": "fullscreen",
+  "display": "standalone",
   "description": "project3-ui",
   "scope": "/",
   "start_url": "/",

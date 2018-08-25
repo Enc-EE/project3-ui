@@ -12,3 +12,23 @@
     margin: .3em;
     padding: .4em;
 }
+
+
+
+.list-item {
+    background-color: white;
+    margin-bottom: 0.5em;
+    display: flex;
+}
+
+.list-item-text {
+    flex-grow: 1;
+}
+
+.list-item-options {
+
+}
+
+.done {
+    background-color: greenyellow;
+}

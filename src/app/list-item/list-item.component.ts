@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { ListItem } from '../models/listItem';
+import { ListItemRepository } from '../repositories/listItemRepository';
 
 @Component({
   selector: 'app-list-item',
@@ -13,10 +15,13 @@ export class ListItemComponent implements OnInit {
   @Output() next = new EventEmitter();
   @Output() stop = new EventEmitter();
   @ViewChild('editor') editor: ElementRef;
+
+  @Input() listItem: ListItem;
+  @Input() listItd: number;
   public editingText: string;
   public isEditing = false;
 
-  constructor() { }
+  constructor(private listItemRepository: ListItemRepository) { }
 
   ngOnInit() {
   }
@@ -50,5 +55,10 @@ export class ListItemComponent implements OnInit {
     } else {
       this.stop.emit(this.editingText);
     }
+  }
+
+  public done() {
+    this.listItem.IsSelected = !this.listItem.IsSelected;
+    this.listItemRepository.update(this.listItd, this.listItem.Id, this.listItem).subscribe();
   }
 }
