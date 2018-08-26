@@ -75,7 +75,7 @@ export class AppComponent implements OnInit {
     this.reloadListItems();
   }
 
-  private reload = () => {
+  public reload = () => {
     this.listRepository.getLists().subscribe({
       next: this.updateView
     });
