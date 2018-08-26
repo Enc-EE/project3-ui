@@ -1,0 +1,8 @@
+<mat-selection-list #shoes (selectionChange)="changeSelection($event)">
+  <mat-list-option *ngFor="let user of users" [selected]="isSharingWithUser(user)" [value]="user">
+    {{user.Name}}
+  </mat-list-option>
+</mat-selection-list>
+<mat-dialog-actions>
+  <button mat-stroked-button [mat-dialog-close]="data">Done</button>
+</mat-dialog-actions>

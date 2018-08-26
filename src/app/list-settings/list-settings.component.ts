@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSlideToggleChange } from '@angular/material';
+import { List } from '../models/list';
 
 export interface DialogData {
-  rename: string;
+  list: List;
   delete: boolean;
 }
 
@@ -12,12 +13,6 @@ export interface DialogData {
   styleUrls: ['./list-settings.component.css']
 })
 export class ListSettingsComponent {
-  public name: string;
-  public static delete = "#?delete";
-  public deleteIt = "#?delete";
-
   constructor(public dialogRef: MatDialogRef<ListSettingsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
-    this.name = data.rename;
-  }
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 }

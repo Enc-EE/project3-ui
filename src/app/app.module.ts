@@ -13,14 +13,20 @@ import { RouterModule } from '../../node_modules/@angular/router';
 import { ListItemComponent } from './list-item/list-item.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { MatButtonModule, MatSelectModule, MatToolbarModule, MatInputModule, MatIconModule, MatDialogModule, MatListModule } from '@angular/material';
+import { MatButtonModule, MatSelectModule, MatToolbarModule, MatInputModule, MatIconModule, MatDialogModule, MatListModule, MatSlideToggleModule } from '@angular/material';
 import { ListSettingsComponent } from './list-settings/list-settings.component';
+import { ListItemGroupRepository } from './repositories/listItemGroupRepository';
+import { ListItemGroupSettingsComponent } from './list-item-group-settings/list-item-group-settings.component';
+import { ListSharingComponent } from './list-sharing/list-sharing.component';
+import { ListSharingRepository } from './repositories/listSharingRepository';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListItemComponent,
-    ListSettingsComponent
+    ListSettingsComponent,
+    ListItemGroupSettingsComponent,
+    ListSharingComponent
   ],
   imports: [
     BrowserModule,
@@ -33,12 +39,13 @@ import { ListSettingsComponent } from './list-settings/list-settings.component';
     MatIconModule,
     MatDialogModule,
     MatListModule,
+    MatSlideToggleModule,
     HttpClientModule,
     RouterModule.forRoot([]),
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [UserRepository, UserService, ListRepository, ListItemRepository],
+  providers: [UserRepository, UserService, ListRepository, ListItemRepository, ListItemGroupRepository, ListSharingRepository],
   bootstrap: [AppComponent],
-  entryComponents: [ListSettingsComponent]
+  entryComponents: [ListSettingsComponent, ListItemGroupSettingsComponent, ListSharingComponent]
 })
 export class AppModule { }

@@ -10,6 +10,10 @@ import { ConfigService } from './services/configService';
 import { ListItemComponent } from './list-item/list-item.component';
 import { MatDialog, MatSelectionListChange, MatSelectionList } from '@angular/material';
 import { ListSettingsComponent } from './list-settings/list-settings.component';
+import { ListItemGroup } from './models/listItemGroup';
+import { ListItemGroupRepository } from './repositories/listItemGroupRepository';
+import { ListItemGroupSettingsComponent } from './list-item-group-settings/list-item-group-settings.component';
+import { ListSharingComponent } from './list-sharing/list-sharing.component';
 
 @Component({
   selector: 'app-root',
@@ -27,12 +31,13 @@ export class AppComponent implements OnInit {
 
   public lists: List[] = [];
   public user: User = new User();
-  public selectedList: List = new List();
+  public selectedList: List;
   public listItems: ListItem[] = [];
+  public groupedListItems: Array<ListItemGroup> = [];
   private skipper = 0;
   public isLoggedIn = false;
 
-  constructor(private cd: ChangeDetectorRef, private route: ActivatedRoute, private router: Router, public dialog: MatDialog, private userService: UserService, private listRepository: ListRepository, private listItemRepository: ListItemRepository) { }
+  constructor(private cd: ChangeDetectorRef, private route: ActivatedRoute, private router: Router, public dialog: MatDialog, private userService: UserService, private listRepository: ListRepository, private listItemRepository: ListItemRepository, private listItemGroupRepository: ListItemGroupRepository) { }
 
   ngOnInit(): void {
     this.route.fragment.subscribe((fragment: string) => {
@@ -58,26 +63,59 @@ export class AppComponent implements OnInit {
   private updateView = (data: List[]) => {
     this.user = this.userService.loggedInUser;
     this.lists = data;
-    if (!this.selectedList.Name && this.lists.length > 0) {
+
+    if (this.selectedList) {
+      var selectedId = this.selectedList.Id;
+      this.selectedList = this.lists.find(x => x.Id == selectedId);
+    }
+
+    if (!this.selectedList && this.lists.length > 0) {
       this.selectedList = this.lists[0];
     }
     this.reloadListItems();
   }
 
-  private reload() {
+  private reload = () => {
     this.listRepository.getLists().subscribe({
       next: this.updateView
     });
   }
 
   private reloadListItems() {
-    if (this.selectedList.Id) {
-      this.listItemRepository.getAll(this.selectedList.Id).subscribe({
-        next: (listItems) => {
-          this.listItems = listItems;
-        }
-      })
+    if (this.selectedList && this.selectedList.Id) {
+      if (this.selectedList.IsGroupingEnabled) {
+        this.listItemGroupRepository.getAll(this.selectedList.Id).subscribe({
+          next: (listItemGroups) => {
+            this.groupedListItems = listItemGroups;
+          }
+        })
+      } else {
+        this.listItemRepository.getAll(this.selectedList.Id).subscribe({
+          next: (listItems) => {
+            this.listItems = listItems;
+          }
+        })
+      }
     }
+  }
+
+  public addGroup = () => {
+    const group = new ListItemGroup();
+    group.Name = "group";
+    this.listItemGroupRepository.create(this.selectedList.Id, group).subscribe({
+      next: this.reload
+    });
+  }
+
+  public addNewGrouped = (listItemGroup: ListItemGroup) => {
+    var listItem = new ListItem();
+    listItem.Name = "ListItem :) " + (this.listItems.length + 1);
+    listItem.ListItemGroup = listItemGroup;
+    this.listItemRepository.create(this.selectedList.Id, listItem).subscribe({
+      next: () => {
+        this.reloadListItems();
+      }
+    })
   }
 
   public addList() {
@@ -170,14 +208,6 @@ export class AppComponent implements OnInit {
     }
   }
 
-  public editListName() {
-    this.listNameEditorText = this.selectedList.Name
-    this.isListNameEditing = true;
-    setTimeout(() => {
-      this.listNameEditor.nativeElement.focus();
-    }, 200);
-  }
-
   public keyUp(event: KeyboardEvent) {
     if (event.keyCode == 13) {
       this.endEdit();
@@ -201,47 +231,77 @@ export class AppComponent implements OnInit {
   public settings() {
     const dialogRef = this.dialog.open(ListSettingsComponent, {
       width: '250px',
-      data: { rename: this.selectedList.Name, delete: false }
+      data: { list: this.selectedList, delete: false }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed: ' + result);
-      if (result === ListSettingsComponent.delete) {
-        this.removeList();
-      } else if (result && result != this.selectedList.Name) {
-        this.selectedList.Name = result;
-        this.listRepository.updateList(this.selectedList.Id, this.selectedList).subscribe({
-          next: () => {
-            this.reload();
-          }
-        });
-      }
-    });
-  }
-
-  public selectionChanged = (event: MatSelectionListChange) => {
-    this.changeSelection(event.option.value, event.option.selected)
-  }
-
-  private changeSelection = (listItem: ListItem, isSelected: boolean) => {
-    listItem.IsSelected = isSelected;
-    this.listItemRepository.update(this.selectedList.Id, listItem.Id, listItem).subscribe({
-      next: () => {
-        this.reloadListItems();
+      if (result) {
+        if (result.delete) {
+          this.removeList();
+        } else {
+          this.listRepository.updateList(this.selectedList.Id, this.selectedList).subscribe({
+            next: () => {
+              this.reload();
+            }
+          });
+        }
       }
     });
   }
 
   public organize = () => {
-    for (let i = 0; i < this.listItems.length; i++) {
-      const listItem = this.listItems[i];
-      if (listItem.IsSelected) {
-        this.deleteListItem(listItem);
+    if (this.selectedList.IsGroupingEnabled) {
+      for (let i = 0; i < this.groupedListItems.length; i++) {
+        const groupedListItem = this.groupedListItems[i];
+        for (let j = 0; j < groupedListItem.ListItems.length; j++) {
+          const listItem = groupedListItem.ListItems[j];
+          if (listItem.IsSelected) {
+            this.deleteListItem(listItem);
+          }
+        }
+      }
+    } else {
+      for (let i = 0; i < this.listItems.length; i++) {
+        const listItem = this.listItems[i];
+        if (listItem.IsSelected) {
+          this.deleteListItem(listItem);
+        }
       }
     }
-    // for (let i = 0; i < selection.selectedOptions.selected.length; i++) {
-    //   const option = selection.selectedOptions.selected[i];
-    //   this.deleteListItem(option.value);
-    // }
+  }
+
+  public groupSettings(listItemGroup: ListItemGroup) {
+    const dialogRef = this.dialog.open(ListItemGroupSettingsComponent, {
+      width: '250px',
+      data: { listItemGroup: listItemGroup, delete: false }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.delete) {
+          this.listItemGroupRepository.delete(this.selectedList.Id, listItemGroup.Id).subscribe({
+            next: () => {
+              this.reload();
+            }
+          });
+        } else {
+          this.listItemGroupRepository.update(this.selectedList.Id, listItemGroup.Id, listItemGroup).subscribe({
+            next: () => {
+              this.reload();
+            }
+          });
+        }
+      }
+    });
+  }
+
+  public share = () => {
+    const dialogRef = this.dialog.open(ListSharingComponent, {
+      width: '250px',
+      data: this.selectedList.Id
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
 }
