@@ -2,19 +2,26 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: seashell;
+    background-color: rgb(228, 228, 255);
+}
+
+.app-login {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .top {
-    
+    flex-shrink: 0;
 }
 
 .content {
-    margin: 0.4em;
+    padding: 0.4em;
     flex-grow: 1;
     overflow: auto;
 }
 
 .bottom {
-
+    flex-shrink: 0;
 }

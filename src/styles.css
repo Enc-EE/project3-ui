@@ -12,7 +12,7 @@ html, body {
 }
 
 body {
-    overflow: hidden;
+    overflow: hidden; /* prevents android pwa scroll down update */
 }
 
 .hidden {

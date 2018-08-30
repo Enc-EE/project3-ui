@@ -14,6 +14,7 @@ import { ListItemGroup } from './models/listItemGroup';
 import { ListItemGroupRepository } from './repositories/listItemGroupRepository';
 import { ListItemGroupSettingsComponent } from './list-item-group-settings/list-item-group-settings.component';
 import { ListSharingComponent } from './list-sharing/list-sharing.component';
+import { UserRepository } from './repositories/userRepository';
 
 @Component({
   selector: 'app-root',
@@ -37,9 +38,10 @@ export class AppComponent implements OnInit {
   private skipper = 0;
   public isLoggedIn = false;
 
-  constructor(private cd: ChangeDetectorRef, private route: ActivatedRoute, private router: Router, public dialog: MatDialog, private userService: UserService, private listRepository: ListRepository, private listItemRepository: ListItemRepository, private listItemGroupRepository: ListItemGroupRepository) { }
+  constructor(private cd: ChangeDetectorRef, private route: ActivatedRoute, private router: Router, public dialog: MatDialog, private userService: UserService, private listRepository: ListRepository, private listItemRepository: ListItemRepository, private listItemGroupRepository: ListItemGroupRepository, public userRepository: UserRepository) { }
 
   ngOnInit(): void {
+    this.userRepository.wakeUp().subscribe();
     this.route.fragment.subscribe((fragment: string) => {
       if (this.skipper == 1) {
         if (fragment) {

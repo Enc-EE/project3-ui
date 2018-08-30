@@ -1,7 +1,7 @@
 {
   "name": "project3-ui",
   "short_name": "project3-ui",
-  "theme_color": "#1976d2",
+  "theme_color": "#e4e4ff",
   "background_color": "#fafafa",
   "display": "standalone",
   "description": "project3-ui",

@@ -1,9 +1,8 @@
-<div class="app">
+<div class="app" *ngIf="isLoggedIn">
     <mat-toolbar color="primary" class="top mat-elevation-z6">
         <span>Hello {{user.Name}}</span>
     </mat-toolbar>
     <div class="content">
-        <button mat-flat-button (click)="login()" *ngIf="!isLoggedIn">Login</button>
         <div *ngIf="isLoggedIn">
 
             <mat-form-field>
@@ -59,4 +58,7 @@
             <mat-icon>refresh</mat-icon>
         </button>
     </mat-toolbar>
+</div>
+<div class="app-login" *ngIf="!isLoggedIn">
+    <button mat-flat-button (click)="login()">Login with Google</button>
 </div>
