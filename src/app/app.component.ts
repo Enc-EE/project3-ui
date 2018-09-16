@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
     this.route.fragment.subscribe((fragment: string) => {
       if (this.skipper == 1) {
         if (fragment) {
-          var token = fragment.split(/[&=]/)[1];
+          var token = fragment.split('id_token=')[1].split('&')[0];
           ConfigService.token = token;
           this.isLoggedIn = true;
           this.userService.afterGotToken(() => {

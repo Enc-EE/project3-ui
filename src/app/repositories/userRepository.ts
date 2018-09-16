@@ -16,7 +16,7 @@ export class UserRepository extends BaseRepository {
         return this.http.get<User>(environment.apiUrl + 'api/users/me', {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer test'
+                'Authorization': ''
             })
         })
     }
