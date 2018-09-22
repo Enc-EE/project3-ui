@@ -37,6 +37,7 @@ export class AppComponent implements OnInit {
   public groupedListItems: Array<ListItemGroup> = [];
   private skipper = 0;
   public isLoggedIn = false;
+  public isLoading = false;
 
   constructor(private cd: ChangeDetectorRef, private route: ActivatedRoute, private router: Router, public dialog: MatDialog, private userService: UserService, private listRepository: ListRepository, private listItemRepository: ListItemRepository, private listItemGroupRepository: ListItemGroupRepository, public userRepository: UserRepository) { }
 
@@ -48,8 +49,10 @@ export class AppComponent implements OnInit {
           var token = fragment.split('id_token=')[1].split('&')[0];
           ConfigService.token = token;
           this.isLoggedIn = true;
+          this.isLoading = true;
           this.userService.afterGotToken(() => {
             this.reload();
+            this.isLoading = false;
           });
           this.router.navigate(['/']);
         }

@@ -23,18 +23,18 @@
             </button>
 
             <mat-list *ngIf="selectedList && !selectedList.IsGroupingEnabled">
-                <app-list-item *ngFor="let listItem of listItems" [text]="listItem.Name" [listItem]="listItem" [listItd]="selectedList.Id"
-                    (next)="editNext(listItem)" (remove)="deleteListItem(listItem)" (update)="updateListItem(listItem, $event)"
-                    (stop)="stop(listItem, $event)"></app-list-item>
+                <app-list-item *ngFor="let listItem of listItems" [text]="listItem.Name" [listItem]="listItem"
+                    [listItd]="selectedList.Id" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)"
+                    (update)="updateListItem(listItem, $event)" (stop)="stop(listItem, $event)"></app-list-item>
             </mat-list>
 
             <div *ngIf="selectedList && selectedList.IsGroupingEnabled">
                 <div *ngFor="let listItemGroup of groupedListItems">
                     <span (click)="groupSettings(listItemGroup)">{{listItemGroup.Name}}</span>
                     <mat-list>
-                        <app-list-item *ngFor="let listItem of listItemGroup.ListItems" [text]="listItem.Name" [listItem]="listItem" [listItd]="selectedList.Id"
-                            (next)="editNext(listItem)" (remove)="deleteListItem(listItem)" (update)="updateListItem(listItem, $event)"
-                            (stop)="stop(listItem, $event)"></app-list-item>
+                        <app-list-item *ngFor="let listItem of listItemGroup.ListItems" [text]="listItem.Name"
+                            [listItem]="listItem" [listItd]="selectedList.Id" (next)="editNext(listItem)" (remove)="deleteListItem(listItem)"
+                            (update)="updateListItem(listItem, $event)" (stop)="stop(listItem, $event)"></app-list-item>
                     </mat-list>
                     <button mat-raised-button mat-icon-button (click)="addNewGrouped(listItemGroup)">
                         <mat-icon>add</mat-icon>
@@ -61,4 +61,8 @@
 </div>
 <div class="app-login" *ngIf="!isLoggedIn">
     <button mat-flat-button (click)="login()">Login with Google</button>
+</div>
+
+<div class="loading" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
 </div>
